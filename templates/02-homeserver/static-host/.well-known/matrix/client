@@ -1,0 +1,5 @@
+{
+  "m.homeserver": {
+    "base_url": "https://__HS_HOST__:8448"
+  }
+}

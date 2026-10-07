@@ -1,0 +1,11 @@
+port: 7880
+rtc:
+  tcp_port: 7881
+  udp_port: 7882
+  use_external_ip: false
+  # Advertise the overlay address so clients on the network reach media directly.
+  node_ip: "__OVERLAY_IP__"
+keys:
+  "__LIVEKIT_KEY__": "__LIVEKIT_SECRET__"
+logging:
+  level: info

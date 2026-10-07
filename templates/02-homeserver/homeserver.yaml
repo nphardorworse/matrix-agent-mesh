@@ -1,0 +1,51 @@
+# Rendered by render.sh. Edit templates/, not rendered/.
+server_name: "__SERVER_NAME__"
+public_baseurl: "https://__HS_HOST__:8448/"
+pid_file: /data/homeserver.pid
+serve_server_wellknown: false
+
+listeners:
+  - port: 8008
+    type: http
+    tls: false
+    x_forwarded: true
+    # 0.0.0.0 inside the container only. The published port is loopback.
+    bind_addresses: ["0.0.0.0"]
+    resources:
+      # Keep "federation" even with federation closed: it serves the OpenID
+      # endpoint that call auth (chapter 02b) uses to check users.
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: "__POSTGRES_PASSWORD__"
+    database: synapse
+    host: homeserver-db
+    cp_min: 5
+    cp_max: 10
+
+log_config: /config/log.config
+media_store_path: /data/media_store
+# The one file you can never replace. Back it up.
+signing_key_path: /data/signing.key
+
+registration_shared_secret: "__REGISTRATION_SHARED_SECRET__"
+macaroon_secret_key: "__MACAROON_SECRET_KEY__"
+form_secret: "__FORM_SECRET__"
+enable_registration: false
+
+encryption_enabled_by_default_for_room_type: all
+
+# Phone notifications leave through the client vendor's push gateway to Apple
+# or Google. Send only IDs and counts, never message text or sender names.
+push:
+  include_content: false
+
+# Federation closed. To open later, see the last section of chapter 02.
+federation_domain_whitelist: []
+trusted_key_servers: []
+suppress_key_server_warning: true
+report_stats: false

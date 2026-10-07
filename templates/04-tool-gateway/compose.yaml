@@ -1,0 +1,31 @@
+# Chapter 04: your build of specs/tool-gateway.md.
+services:
+  tool-gateway:
+    image: ${TOOL_GATEWAY_IMAGE:?build your own from specs/tool-gateway.md and set TOOL_GATEWAY_IMAGE}
+    restart: unless-stopped
+    user: "${MESH_UID:?}:${MESH_GID:?}"
+    env_file:
+      # Only the gateway's own keys. See the Scoped secrets requirement (M9).
+      - path: ./gateway.env
+        required: false
+    environment:
+      TOOL_GATEWAY_CONFIG: /config/config.yaml
+      TOOL_GATEWAY_LOG_DIR: /var/log/tool-gateway
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./gateway-config.yaml:/config/config.yaml:ro
+      - ${MESH_DATA_DIR:?}/tool-gateway:/data
+      - ${MESH_DATA_DIR:?}/tool-gateway-logs:/var/log/tool-gateway
+    # No published ports: bots reach it as tool-gateway:8101 on the mesh network.
+    healthcheck:
+      # Needs curl in your image. Swap in another probe of /health if it has none.
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8101/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks: [mesh]
+
+networks:
+  mesh: {}

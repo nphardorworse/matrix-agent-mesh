@@ -1,0 +1,16 @@
+# Two include lines per chapter. Uncomment both when you reach its chapter,
+# after running ./render.sh. Every chapter reads the same .env at the repo root.
+name: mesh
+include:
+  # - path: rendered/02-homeserver/compose.yaml
+  #   env_file: .env
+  # - path: rendered/02b-calls/compose.yaml
+  #   env_file: .env
+  # - path: rendered/03-first-persona/compose.yaml
+  #   env_file: .env
+  # - path: rendered/04-tool-gateway/compose.yaml
+  #   env_file: .env
+  # - path: rendered/05-scribe/compose.yaml
+  #   env_file: .env
+  # - path: rendered/06-knowledge-store/compose.yaml
+  #   env_file: .env

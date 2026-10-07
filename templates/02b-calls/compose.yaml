@@ -1,0 +1,33 @@
+# Chapter 02b (optional): voice and video calls.
+services:
+  call-sfu:
+    image: livekit/livekit-server:${LIVEKIT_TAG:?set LIVEKIT_TAG in .env}
+    restart: unless-stopped
+    command: ["--config", "/etc/livekit.yaml"]
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      # Signaling on loopback; the overlay HTTPS proxy forwards :7443 here.
+      - "127.0.0.1:7880:7880"
+      # Media goes straight to clients on the overlay network.
+      - "${OVERLAY_IP:?}:7881:7881"
+      - "${OVERLAY_IP:?}:7882:7882/udp"
+    networks: [mesh]
+
+  call-auth:
+    image: ghcr.io/element-hq/lk-jwt-service:${LK_JWT_TAG:?set LK_JWT_TAG in .env}
+    restart: unless-stopped
+    depends_on: [call-sfu]
+    environment:
+      LIVEKIT_URL: "wss://${HS_HOST:?}:7443"
+      LIVEKIT_KEY: ${LIVEKIT_KEY:?}
+      LIVEKIT_SECRET: ${LIVEKIT_SECRET:?}
+      LIVEKIT_FULL_ACCESS_HOMESERVERS: ${SERVER_NAME:?}
+      LIVEKIT_JWT_BIND: ":8080"
+    ports:
+      # Loopback; the overlay HTTPS proxy forwards :8449 here.
+      - "127.0.0.1:8089:8080"
+    networks: [mesh]
+
+networks:
+  mesh: {}

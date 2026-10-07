@@ -1,0 +1,50 @@
+# Chapter 06: vector index and the knowledge store's MCP server.
+# The knowledge store itself runs from its upstream compose file (see the chapter).
+# render.sh treats any capitalized name with two underscores on each side as a token.
+# A Qdrant setting whose name holds two double underscores, such as a nested setting,
+# would be read as one, so put it in a mounted config file instead.
+services:
+  vector-index:
+    image: qdrant/qdrant:${QDRANT_TAG:?}
+    restart: unless-stopped
+    # Qdrant writes its storage directory, so it runs as the data owner.
+    user: "${MESH_UID:?}:${MESH_GID:?}"
+    environment:
+      # Qdrant sends anonymized usage telemetry unless this is set.
+      QDRANT__TELEMETRY_DISABLED: "true"
+    volumes:
+      - ${MESH_DATA_DIR:?}/vector-index:/qdrant/storage
+      # Snapshots default to a path outside the storage mount, which this user cannot write.
+      - ${MESH_DATA_DIR:?}/vector-index/snapshots:/qdrant/snapshots
+    # No published ports: scribe reaches it as vector-index:6333.
+    networks: [mesh]
+
+  knowledge-mcp:
+    image: ghcr.io/dawncr0w/affine-mcp-server:${KNOWLEDGE_MCP_TAG:?}
+    restart: unless-stopped
+    # Keeps no files, so it can run as the data owner too.
+    user: "${MESH_UID:?}:${MESH_GID:?}"
+    environment:
+      MCP_TRANSPORT: http
+      PORT: "8103"
+      # Listen address inside the container. No port is published.
+      AFFINE_MCP_HTTP_HOST: 0.0.0.0
+      AFFINE_BASE_URL: ${KNOWLEDGE_STORE_URL:?}
+      AFFINE_WORKSPACE_ID: ${KNOWLEDGE_WORKSPACE_ID:?}
+      AFFINE_EMAIL: ${KNOWLEDGE_AGENT_EMAIL:?}
+      AFFINE_PASSWORD: ${KNOWLEDGE_AGENT_PASSWORD:?}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # The image's own healthcheck probes localhost, which resolves to IPv6
+    # while the server listens on IPv4.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8103/healthz >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    # No published ports: the gateway and scribe reach it as knowledge-mcp:8103/mcp.
+    networks: [mesh]
+
+networks:
+  mesh: {}

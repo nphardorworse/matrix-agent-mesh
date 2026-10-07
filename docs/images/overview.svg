@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3A3A36"/>
+    </marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#B5542B"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="860" fill="#FAFAF7"/>
+
+  <text x="40" y="62" font-size="32" font-weight="700" fill="#1C1C1A">People and AI agents in the same chat rooms, on a machine you control</text>
+  <text x="40" y="96" font-size="19" fill="#5A5A55">Solid lines stay on your machine. Dashed lines leave it, and only when you turn them on.</text>
+
+  <!-- Devices -->
+  <rect x="40" y="200" width="220" height="150" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="150" y="245" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Your devices</text>
+  <text x="150" y="278" font-size="17" fill="#5A5A55" text-anchor="middle">Chat app on</text>
+  <text x="150" y="300" font-size="17" fill="#5A5A55" text-anchor="middle">phones and laptops</text>
+
+  <!-- Machine -->
+  <rect x="320" y="140" width="770" height="640" rx="14" fill="#F1EFE9" stroke="#8F8B80" stroke-width="2"/>
+  <text x="345" y="178" font-size="22" font-weight="700" fill="#1C1C1A">Your machine</text>
+  <text x="512" y="178" font-size="17" fill="#5A5A55">no port on a public address</text>
+
+  <!-- Row 1 -->
+  <rect x="345" y="210" width="210" height="120" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="450" y="252" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Matrix server</text>
+  <text x="450" y="282" font-size="17" fill="#5A5A55" text-anchor="middle">rooms, accounts,</text>
+  <text x="450" y="304" font-size="17" fill="#5A5A55" text-anchor="middle">encrypted messages</text>
+
+  <rect x="600" y="210" width="210" height="120" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="705" y="252" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Agents</text>
+  <text x="705" y="282" font-size="17" fill="#5A5A55" text-anchor="middle">each one a chat user,</text>
+  <text x="705" y="304" font-size="17" fill="#5A5A55" text-anchor="middle">answers when mentioned</text>
+
+  <rect x="855" y="210" width="210" height="150" rx="10" fill="#1F4D3A"/>
+  <text x="960" y="250" font-size="21" font-weight="700" fill="#FFFFFF" text-anchor="middle">Tool gateway</text>
+  <text x="960" y="280" font-size="17" fill="#DDE8E1" text-anchor="middle">per-agent tools</text>
+  <text x="960" y="302" font-size="17" fill="#DDE8E1" text-anchor="middle">daily token budgets</text>
+  <text x="960" y="324" font-size="17" fill="#DDE8E1" text-anchor="middle">logs every tool call</text>
+
+  <!-- Row 2 -->
+  <rect x="345" y="440" width="210" height="120" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="450" y="482" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Scribe</text>
+  <text x="450" y="512" font-size="17" fill="#5A5A55" text-anchor="middle">runs in the background,</text>
+  <text x="450" y="534" font-size="17" fill="#5A5A55" text-anchor="middle">files each day as memory</text>
+
+  <rect x="600" y="440" width="210" height="120" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="705" y="482" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Knowledge store</text>
+  <text x="705" y="512" font-size="17" fill="#5A5A55" text-anchor="middle">documents and links,</text>
+  <text x="705" y="534" font-size="17" fill="#5A5A55" text-anchor="middle">agents search it locally</text>
+
+  <rect x="855" y="440" width="210" height="120" rx="10" fill="#FFFFFF" stroke="#C9C6BE" stroke-width="2"/>
+  <text x="960" y="482" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Local models</text>
+  <text x="960" y="512" font-size="17" fill="#5A5A55" text-anchor="middle">do the everyday work</text>
+
+  <!-- Rule -->
+  <rect x="345" y="620" width="720" height="120" rx="10" fill="#FFFFFF" stroke="#1F4D3A" stroke-width="2"/>
+  <text x="370" y="660" font-size="20" font-weight="700" fill="#1F4D3A">The rule</text>
+  <text x="370" y="692" font-size="18" fill="#1C1C1A">An agent on a hosted model never gets a tool that reads your data.</text>
+  <text x="370" y="720" font-size="18" fill="#1C1C1A">The gateway refuses to start if the config allows it, and checks every call.</text>
+
+  <!-- Outside -->
+  <text x="1135" y="178" font-size="22" font-weight="700" fill="#B5542B">Outside, opt-in</text>
+  <rect x="1135" y="210" width="230" height="110" rx="10" fill="#FFFFFF" stroke="#B5542B" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="1250" y="252" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Hosted model</text>
+  <text x="1250" y="282" font-size="17" fill="#5A5A55" text-anchor="middle">only when you add it,</text>
+  <text x="1250" y="304" font-size="17" fill="#5A5A55" text-anchor="middle">no local tools</text>
+
+  <rect x="1135" y="370" width="230" height="90" rx="10" fill="#FFFFFF" stroke="#B5542B" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="1250" y="408" font-size="21" font-weight="700" fill="#1C1C1A" text-anchor="middle">Web search</text>
+  <text x="1250" y="436" font-size="17" fill="#5A5A55" text-anchor="middle">if you enable it</text>
+
+  <!-- Arrows -->
+  <line x1="260" y1="270" x2="341" y2="270" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)" marker-start="url(#a)"/>
+  <text x="150" y="385" font-size="16" fill="#5A5A55" text-anchor="middle">connected over a</text>
+  <text x="150" y="405" font-size="16" fill="#5A5A55" text-anchor="middle">private overlay network</text>
+
+  <line x1="555" y1="270" x2="596" y2="270" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)" marker-start="url(#a)"/>
+  <line x1="810" y1="270" x2="851" y2="270" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)"/>
+  <line x1="960" y1="360" x2="960" y2="436" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)"/>
+  <line x1="890" y1="360" x2="790" y2="436" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)"/>
+  <line x1="450" y1="330" x2="450" y2="436" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="462" y="390" font-size="16" fill="#5A5A55">reads rooms</text>
+  <line x1="555" y1="500" x2="596" y2="500" stroke="#3A3A36" stroke-width="2.5" marker-end="url(#a)"/>
+
+  <line x1="1065" y1="250" x2="1131" y2="250" stroke="#B5542B" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#o)"/>
+  <line x1="1065" y1="330" x2="1131" y2="405" stroke="#B5542B" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#o)"/>
+
+  <text x="1135" y="520" font-size="16" font-weight="700" fill="#5A5A55">Leaves either way, as metadata:</text>
+  <text x="1135" y="544" font-size="16" fill="#5A5A55">overlay device info,</text>
+  <text x="1135" y="566" font-size="16" fill="#5A5A55">certificate logs,</text>
+  <text x="1135" y="588" font-size="16" fill="#5A5A55">mobile push (no text)</text>
+
+  <text x="40" y="830" font-size="16" fill="#8F8B80">matrix-agent-mesh: docs, specs and templates for building it yourself</text>
+</svg>

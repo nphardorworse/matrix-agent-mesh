@@ -1,0 +1,18 @@
+# Chapter 03: the first agent, talking straight to the model runtime.
+services:
+  bot-bridge-local-agent:
+    image: ghcr.io/etkecc/baibot:${BAIBOT_TAG:?set BAIBOT_TAG in .env}
+    restart: unless-stopped
+    user: "${MESH_UID:?}:${MESH_GID:?}"
+    environment:
+      BAIBOT_CONFIG_FILE_PATH: /config/config.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # The bot's encryption store. Losing it means a new, unverified device.
+      - ${MESH_DATA_DIR:?}/bot-local-agent:/data
+      - ./local-agent.yaml:/config/config.yml:ro
+    networks: [mesh]
+
+networks:
+  mesh: {}

@@ -1,0 +1,21 @@
+# Chapter 05: your build of specs/scribe.md.
+services:
+  scribe:
+    image: ${SCRIBE_IMAGE:?build your own from specs/scribe.md and set SCRIBE_IMAGE}
+    restart: unless-stopped
+    user: "${MESH_UID:?}:${MESH_GID:?}"
+    environment:
+      SCRIBE_CONFIG: /config/config.yaml
+      SCRIBE_PASSWORD: ${SCRIBE_PASSWORD:?}
+      TZ: ${SCRIBE_TIMEZONE:?}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./scribe-config.yaml:/config/config.yaml:ro
+      # The only writer of the scribe database. Anything else mounts it read-only.
+      - ${MESH_DATA_DIR:?}/scribe:/data
+    # No published ports: scribe reaches the homeserver as homeserver:8008 on the mesh network.
+    networks: [mesh]
+
+networks:
+  mesh: {}

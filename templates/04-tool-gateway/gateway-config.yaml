@@ -1,0 +1,56 @@
+# Rendered by render.sh. A complete example of the schema in specs/tool-gateway.md.
+# Secrets never appear here. api_key_env names the variable in gateway.env.
+global_hard_iteration_cap: 6
+
+upstream_providers:
+  # The local model runtime from chapter 00. Requests stay on your machine.
+  local:
+    base_url: "__MODEL_RUNTIME_URL__"
+    api_key_env: null
+    data_residency: local
+    # A local runtime can take a while to load a model on demand.
+    timeout_seconds: 240
+  # Reference hosted provider. Requests leave your machine.
+  hosted:
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: HOSTED_PROVIDER_API_KEY
+    data_residency: cloud
+
+tool_sources:
+  # Reference web search API (Brave Search), through the gateway's built-in HTTP adapter.
+  web:
+    type: http
+    api_key_env: SEARCH_API_KEY
+    data_residency: public
+    quota:
+      limit: 1800
+      period: month
+    tools:
+      - source_name: web_search
+        expose_as: web_search
+  # Enabled in chapter 06. Until that service runs, the gateway boots without it
+  # and keeps retrying, because required is false.
+  kb:
+    type: mcp
+    url: http://knowledge-mcp:8103/mcp
+    required: false
+    data_residency: local
+    tools:
+      - source_name: search_docs
+        expose_as: kb_search
+
+agents:
+  local-agent:
+    upstream: local
+    model_id: "__LOCAL_MODEL__"
+    tools: [web_search, kb_search]
+    max_tool_iterations: 3
+    daily_token_budget: 2000000
+  cloud-agent:
+    upstream: hosted
+    model_id: "__CLOUD_MODEL__"
+    # Never add kb_search here. It reads local data, and the gateway refuses
+    # to boot if a cloud agent lists it.
+    tools: [web_search]
+    max_response_tokens: 4096
+    daily_token_budget: 500000

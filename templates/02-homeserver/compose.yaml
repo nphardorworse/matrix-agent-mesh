@@ -1,0 +1,43 @@
+# Chapter 02: homeserver and its database.
+# All persistent data lives under MESH_DATA_DIR, never under rendered/.
+services:
+  homeserver-db:
+    image: postgres:${POSTGRES_TAG:?set POSTGRES_TAG in .env}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: synapse
+      POSTGRES_DB: synapse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      # The homeserver requires C collation; it cannot be changed after creation.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - ${MESH_DATA_DIR:?}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks: [mesh]
+
+  homeserver:
+    image: matrixdotorg/synapse:${SYNAPSE_TAG:?set SYNAPSE_TAG in .env}
+    restart: unless-stopped
+    depends_on:
+      homeserver-db:
+        condition: service_healthy
+    environment:
+      SYNAPSE_CONFIG_PATH: /config/homeserver.yaml
+      UID: ${MESH_UID:?}
+      GID: ${MESH_GID:?}
+    volumes:
+      - ${MESH_DATA_DIR:?}/homeserver:/data
+      - ./homeserver.yaml:/config/homeserver.yaml:ro
+      - ./log.config:/config/log.config:ro
+    ports:
+      # Loopback only. The overlay network's HTTPS proxy forwards :8448 here.
+      - "127.0.0.1:8008:8008"
+    networks: [mesh]
+
+networks:
+  mesh: {}

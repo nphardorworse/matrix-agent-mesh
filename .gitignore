@@ -1,0 +1,9 @@
+# Secrets and rendered configs never go in git.
+.env
+rendered/
+# In case data is placed inside the repo by mistake.
+data/
+*.db
+*.sqlite3
+*.signing.key
+signing.key

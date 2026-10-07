@@ -1,0 +1,50 @@
+# Rendered by render.sh. One file per agent.
+homeserver:
+  server_name: "__SERVER_NAME__"
+  url: http://homeserver:8008
+
+user:
+  mxid_localpart: local-agent
+  password: "__LOCAL_AGENT_PASSWORD__"
+  name: "Local agent"
+  encryption:
+    recovery_passphrase: "__LOCAL_AGENT_RECOVERY_PASSPHRASE__"
+    recovery_reset_allowed: false
+
+command_prefix: "!local"
+
+room:
+  post_join_self_introduction_enabled: false
+
+access:
+  admin_patterns:
+    - "@alice:__SERVER_NAME__"
+
+persistence:
+  data_dir_path: /data
+  session_encryption_key: "__LOCAL_AGENT_SESSION_KEY__"
+  config_encryption_key: "__LOCAL_AGENT_CONFIG_KEY__"
+
+agents:
+  static_definitions:
+    - id: default
+      provider: openai-compatible
+      config:
+        # Chapter 03: the model runtime. Chapter 04: the tool gateway.
+        base_url: "__LOCAL_AGENT_BASE_URL__"
+        api_key: unused
+        text_generation:
+          model_id: "__LOCAL_MODEL__"
+          temperature: 0.7
+          prompt: |
+            You are a helpful assistant in a private team chat. Answer only
+            when someone mentions you or starts a message with !local. Be
+            brief and say when you do not know something.
+
+initial_global_config:
+  handler:
+    catch_all: static/default
+  user_patterns:
+    - "@*:__SERVER_NAME__"
+
+logging: warn,mxlink=info,baibot=info

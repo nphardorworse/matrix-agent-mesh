@@ -1,0 +1,57 @@
+# Rendered by render.sh. A complete example of the schema in specs/scribe.md.
+# Secrets never appear here. The Matrix password comes from SCRIBE_PASSWORD, for the first login only.
+homeserver_url: http://homeserver:8008
+user_id: "@scribe:__SERVER_NAME__"
+device_name: scribe
+# The saved device, the sync position and the encryption store. Back this up with the rest of MESH_DATA_DIR.
+store_path: /data/crypto
+# The local store, the source of truth for every summary, to-do and link.
+db_path: /data/scribe.db
+
+rooms:
+  # Empty means every group room scribe is invited to by an admin.
+  # Entries are room ids that start with "!". An alias aborts boot.
+  allowlist: []
+  denylist: []
+
+# Full Matrix ids allowed to run commands and invite scribe.
+admins:
+  - "@alice:__SERVER_NAME__"
+
+digest:
+  # Five fields, in the time zone below. Use weekday names ("mon-fri"), never numbers.
+  schedule: "0 7 * * *"
+  # An IANA name. The container's TZ and the host's zone play no part.
+  timezone: "__SCRIBE_TIMEZONE__"
+  window_hours: 24
+  min_messages: 3
+  model: "__LOCAL_MODEL__"
+  # Off. A cron expression here turns on the weekly roll-up, the only post scribe makes unasked.
+  weekly_schedule: null
+
+retention:
+  raw_message_days: 3
+
+# Every model call goes here. "local" means the requests stay on your machine.
+model_runtime:
+  url: "__MODEL_RUNTIME_URL__"
+  data_residency: local
+
+# Off by default. true makes scribe fetch each saved link's page for its title and description,
+# which sends a request from this host to every linked site. See chapter 06 before turning it on.
+links:
+  fetch_metadata: false
+
+# Off until chapter 06: with url null, scribe keeps links in its store and builds no index.
+vector_index:
+  url: null
+  collection: links
+  embedding: in_process
+
+# Off until chapter 06. The other keys are ignored while enabled is false.
+knowledge_store:
+  enabled: false
+  url: http://knowledge-mcp:8103/mcp
+  workspace_id: change-me
+  digest_parent: change-me
+  todos_target: change-me
